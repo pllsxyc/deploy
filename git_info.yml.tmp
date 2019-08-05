@@ -1,0 +1,3 @@
+git_info:
+  repo_url: git@git.xiawanapp.cn:xiadawei/xiawan.git
+  secret_filename: /root/.ssh/id_rsa

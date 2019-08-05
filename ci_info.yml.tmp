@@ -1,0 +1,29 @@
+ci_info:
+  # 注意，最终的目录应和项目仓库名相同，例如/data/data/deploy 的项目仓库名就是deploy
+  workspace: /data/data/
+  repo_name: xiawan
+  default_deploy_action: deploy
+  delete_workspace_before_build: False
+  # 显示tags的个数，-1代表倒序全部显示
+  show_tags_number: 20
+  ssh_secret_filename: /root/.ssh/id_rsa
+  #默认是多线程发布，就是多个主机用多线程连接发布，如果不需要，而要改成循环发布，则改成False
+  multi-thread: True
+  ssh_timeout: 3
+
+project_info:
+  # 项目目录必须要有结尾的/
+  project_dir: /data/data/tmp/
+  # 如果有域名先写域名，没有域名写项目名即可
+  project_name: xiawan
+  # 相当于在项目目录下做的操作
+  local_commands:
+    - cp /data/config/xiawan_test_parameters.yml app/config/parameters.yml
+    - cp /data/config/xiawan_config_dev.yml app/config/config_dev.yml
+    - composer install
+  remote_commands:
+    # 创建tag目录
+    - mkdir -p {_project_dir}/{_project_name}/releases/{_current_tag}
+    - mv {_project_dir}/{_tmp_repo_name}/* {_project_dir}/{_project_name}/releases/{_current_tag}/
+    - rm -rf {_project_dir}/{_project_name}/current
+    - ln -sf {_project_dir}/{_project_name}/releases/{_current_tag} {_project_dir}/{_project_name}/current

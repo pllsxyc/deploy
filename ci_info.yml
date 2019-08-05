@@ -1,0 +1,34 @@
+ci_info:
+  workspace: /data/data/
+  repo_name: hipaiadminh5
+  default_deploy_action: deploy
+  delete_workspace_before_build: False
+  # 显示tags的个数，-1代表倒序全部显示
+  show_tags_number: 20
+  ssh_secret_filename: /home/penglinlin/id_rsa
+  #默认是多线程发布，就是多个主机用多线程连接发布，如果不需要，而要改成循环发布，则改成False
+  multi-thread: True
+  ssh_timeout: 3
+
+project_info:
+  # 项目目录必须要有结尾的/
+  project_dir: /data/web/
+  # 如果有域名先写域名，没有域名写项目名即可
+  project_name: hipaiadminh5
+  frontend_name: hipaiadminh5
+  backend_name: hipai
+  tag_startswith: prd
+  # 相当于在项目目录下做的操作
+  local_commands:
+    - npm install
+    - npm run build
+  remote_deploy_commands:
+    # 创建tag目录
+    - mkdir -p {project_dir}/{project_name}/releases/{current_tag}
+    - nohup tar xvf /tmp/{project_name}{current_tag}.tgz -C {project_dir}/{project_name}/releases/{current_tag}/ >/dev/null 2>&1 &
+    - rm -rf {project_dir}/{project_name}/current
+    - ln -sf {project_dir}/{project_name}/releases/{current_tag} {project_dir}/{project_name}/current
+    - rm -f /tmp/{project_name}{current_tag}.tgz
+  remote_rollback_commands:
+    - rm -rf {project_dir}/{project_name}/current
+    - ln -sf {project_dir}/{project_name}/releases/{current_tag} {project_dir}/{project_name}/current
