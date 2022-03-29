@@ -10,7 +10,7 @@ GitPython==2.1.11
 ipython==7.6.1
 ipython-genutils==0.2.0
 jedi==0.14.1
-paramiko==2.6.0
+paramiko==2.10.1
 parso==0.5.1
 pexpect==4.7.0
 pickleshare==0.7.5
